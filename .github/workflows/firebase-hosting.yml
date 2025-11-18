@@ -1,0 +1,34 @@
+# .github/workflows/firebase-hosting.yml
+name: Deploy to Firebase Hosting
+
+on:
+  push:
+    branches:
+      - main # Se activa al hacer push a la rama principal
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # 1. Configurar Node.js
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      # 2. Instalar y compilar con Vite
+      - name: Install and Build
+        run: |
+          npm install
+          npm run build
+
+      # 3. Desplegar a Firebase Hosting
+      - name: Deploy to Firebase
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_TOKEN_MM }} 
+          channelId: live
+          projectId: milmar-2025
